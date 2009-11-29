@@ -4,6 +4,7 @@
 
 require_once(dirname(__FILE__) . '/DataSet/FileDataSet.class.php');
 require_once(dirname(__FILE__) . '/Similarity/PearsonCorrelationSimilarity.class.php');
+require_once(dirname(__FILE__) . '/Neighbourhood/UserNeighbourhoodNN.class.php');
 
 $dataSet = new FileDataSet('/Volumes/Data/Work/Work/Uni/Dissertation/100k.data');
 
@@ -18,9 +19,8 @@ echo 'Users IDs: ' . implode(',', $userIds) . "\n";
 $similarity = new PearsonCorrelationSimilarity($dataSet);
 #$similarity = new EuclideanDistanceSimilarity();
 
-#$users = new UserNeighbourhoodNN($data);
-#$users->setSimilarity($similarity); // dependency injection
-#$users->setNeighbours(30);
+$userNN = new UserNeighbourhoodNN($data, 30, $similarity);
+
 #
 #$recommender = new UserBasedRecommender($data);
 #$recommender->setNeighbourhood($users);
