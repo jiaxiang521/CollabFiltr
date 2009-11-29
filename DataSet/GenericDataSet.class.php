@@ -30,18 +30,21 @@ final class GenericDataSet implements DataSet {
   public function getNumUsers() { return $this->_userNum; }
   public function getNumItems() { return $this->_itemNum; }
   
+  public function isUser($userId) { return isset($this->_users[$userId]); }
+  public function isItem($itemId) { return isset($this->_items[$itemId]); }
+  
   public function getUser($userId) {
     if (!isset($this->_users[$userId]))
       throw new InvalidArgumentException();
 
-    return new User($this->_users[$userId]);
+    return new User($userId, $this->_users[$userId]);
   }
 
   public function getItem($itemId) {
     if (!isset($this->_items[$itemId]))
       throw new InvalidArgumentException();
 
-    return new Item($this->_items[$itemId]);
+    return new Item($itemId, $this->_items[$itemId]);
   }
 
   public function getUserRatingsArray($user) {
@@ -52,6 +55,9 @@ final class GenericDataSet implements DataSet {
       $user = $user->getId();        
     }
   
+    if (!isset($this->_users[$user]))
+      throw new InvalidArgumentException('Invalid user ID');
+    
     return $this->_users[$user];
   }
 
@@ -63,6 +69,9 @@ final class GenericDataSet implements DataSet {
       $item = $item->getId();
     }
   
+    if (!isset($this->_items[$item]))
+      throw new InvalidArgumentException('Invalid item ID');
+    
     return $this->_items[$item];
   }
 }

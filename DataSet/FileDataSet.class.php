@@ -12,20 +12,17 @@ class FileDataSet implements DataSet {
 
     $builder = new GenericDataSetBuilder();
 
-    while (!feof($fh))
-      $this->loadLine(fgets($fh), $builder);
+    // add each line at a time to builder
+    // (using a builder as GenericDataSet is immutable)
+    while (!feof($fh) && $line = fgets($fh)) {
+      list($userId, $itemId, $rating) = explode("\t", $line);
+      
+      $builder->loadLine($userId, $itemId, $rating);
+    }
 
     fclose($fh);
 
     $this->_dataSet = $builder->build();
-  }
-
-  // put line from file into $_data
-  protected function loadLine($line, $builder) {
-    if (!$line) return;
-
-    list($userId, $itemId, $rating) = explode("\t", $line);
-    $builder->loadLine($userId, $itemId, $rating);
   }
 
   public function getUserIds() { return $this->_dataSet->getUserIds(); }
@@ -33,6 +30,9 @@ class FileDataSet implements DataSet {
 
   public function getNumUsers() { return $this->_dataSet->getNumUsers(); }
   public function getNumItems() { return $this->_dataSet->getNumItems(); }
+  
+  public function isUser($userId) { return $this->_dataSet->isUser($userId); }
+  public function isItem($itemId) { return $this->_dataSet->isItem($itemId); }
 
   public function getUser($userId) { return $this->_dataSet->getUser($userId); }
   public function getItem($itemId) { return $this->_dataSet->getItem($itemId); }

@@ -2,20 +2,22 @@
 
 // Interfaces: DataSet, Similarity, Neighbourhood, Recommender
 
-require_once('DataSet/FileDataSet.class.php');
+require_once(dirname(__FILE__) . '/DataSet/FileDataSet.class.php');
+require_once(dirname(__FILE__) . '/Similarity/PearsonCorrelationSimilarity.class.php');
 
-$data = new FileDataSet('/Volumes/Data/Work/Work/Uni/Dissertation/100k.data');
+$dataSet = new FileDataSet('/Volumes/Data/Work/Work/Uni/Dissertation/100k.data');
 
-echo 'Users Loaded: ' . $data->getNumUsers() . "\n";
-echo 'Items Loaded: ' . $data->getNumItems() . "\n";
+echo 'Users Loaded: ' . $dataSet->getNumUsers() . "\n";
+echo 'Items Loaded: ' . $dataSet->getNumItems() . "\n";
 
-$userIds = $data->getUserIds();
+$userIds = $dataSet->getUserIds();
 sort($userIds);
 
 echo 'Users IDs: ' . implode(',', $userIds) . "\n";
 
-#$similarity = new PearsonCorrelationSimilarity();
-#
+$similarity = new PearsonCorrelationSimilarity($dataSet);
+#$similarity = new EuclideanDistanceSimilarity();
+
 #$users = new UserNeighbourhoodNN($data);
 #$users->setSimilarity($similarity); // dependency injection
 #$users->setNeighbours(30);

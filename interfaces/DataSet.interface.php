@@ -6,6 +6,9 @@ interface DataSet {
   
   public function getNumUsers();
   public function getNumItems();
+
+  public function isUser($userId);
+  public function isItem($itemId);
   
   public function getUser($userId);
   public function getItem($itemId);
