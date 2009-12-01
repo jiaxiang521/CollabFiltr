@@ -11,8 +11,8 @@ class UserNeighbourhoodTest extends CollabFiltrTest {
   }
   
   public function testNN() {
-    $userNeighbouurNN = new UserNeighbourhoodNN($this->_dataSet, 3);
-    $neighbourhood    = $userNeighbouurNN->userNeighbourhood('Toby');
+    $userNeighbourNN = new UserNeighbourhoodNN($this->_dataSet, 3);
+    $neighbourhood   = $userNeighbourNN->userNeighbourhood('Toby');
 
     $top3 = array('Lisa Rose', 'Mick LaSalle', 'Claudia Puig');
     $this->assertEquals(array_keys($neighbourhood), $top3);

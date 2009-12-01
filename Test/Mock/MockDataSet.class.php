@@ -1,7 +1,5 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../DataSet/MockDataSet.class.php');
-
 class MockDataSet implements DataSet {
   private $_users;
 
@@ -52,13 +50,26 @@ class MockDataSet implements DataSet {
   public function getUserIds()  { return array_keys($this->_users); }
   
   public function getUserRatingsArray($user) { return $this->_users[$user]; }
+  
+  public function isUser($user) { return isset($this->_users[$user]); }
+
+  public function getUser($userId) {
+    if (!isset($this->_users[$userId]))
+      throw new InvalidArgumentException();
+
+    return new User($userId, $this->_users[$userId]);
+  }
+
+  public function getItem($itemId) {
+    if (!isset($this->_items[$itemId]))
+      throw new InvalidArgumentException();
+
+    return new Item($itemId, $this->_items[$itemId]);
+  }
 
   public function getItemIds()  { }
   public function getNumUsers() { }
   public function getNumItems() { }
-  public function isUser($a)    { }
   public function isItem($a)    { }
-  public function getUser($a)   { }
-  public function getItem($a)   { }
   public function getItemRatingsArray($a) { }
 }

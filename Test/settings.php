@@ -1,5 +1,8 @@
 <?php
 
+// Path to simpletest
+define('TEST_PATH', dirname(__FILE__) . '/../../simpletest/');
+
 // only SimpleTest an be run directly via PHP CLI or the web
 if (isset($argc) || (!isset($_SERVER['argc'])))
   $TEST_BED = 'SimpleTest';
@@ -10,11 +13,13 @@ if (!isset($TEST_BED))
   die('Unknown test bed, TEST_BED must be SimpleTest or PHPUnit');
 
 if ($TEST_BED == 'SimpleTest') {
-  define('TEST_PATH', dirname(__FILE__) . '/../../simpletest/');
   require_once(TEST_PATH . 'autorun.php');
   
-  class CollabFiltrmTest extends UnitTestCase {
+  class CollabFiltrTest extends UnitTestCase {
     // patch up differences between PHPUnit and SimpleTest
+    
+    protected $sharedFixture;
+    
     public function __call($name, $arguments) {
       if ($name == 'assertEquals')    $name = 'assertEqual';
       if ($name == 'assertNotEquals') $name = 'assertNotEqual';
@@ -22,16 +27,22 @@ if ($TEST_BED == 'SimpleTest') {
       return call_user_func_array(array('parent', $name), $arguments);
     }
   }
+  
+  // has no special meaning to SimpleTest
+  class CollabFiltrTestSuite {
+    protected $sharedFixture;
+  }
 }
 
 elseif ($TEST_BED == 'PHPUnit') {
   require_once 'PHPUnit/Framework.php';
 
   class CollabFiltrTest extends PHPUnit_Framework_TestCase {
-    // patch up differences between PHPUnit and SimpleTest
-    public function pass() { return; }
+    // SimpleTest counts pass(), so mimic this behaviour
+    public function pass() { return $this->assertTrue(1 == 1); }
   }
-
+  
+  class CollabFiltrTestSuite extends PHPUnit_Framework_TestSuite { }
   class TestSuite { }
 }
 

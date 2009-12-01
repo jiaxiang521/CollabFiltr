@@ -19,11 +19,10 @@ echo 'Users IDs: ' . implode(',', $userIds) . "\n";
 $similarity = new PearsonCorrelationSimilarity($dataSet);
 #$similarity = new EuclideanDistanceSimilarity();
 
-$userNN = new UserNeighbourhoodNN($data, 30, $similarity);
+$userNN = new UserNeighbourhoodNN($dataSet, 30, $similarity);
+$recommender = new UserBasedRecommender($dataSet, $userNN);
 
-#
-#$recommender = new UserBasedRecommender($data);
-#$recommender->setNeighbourhood($users);
-#
-#$recommendations = $recommender->recommend(USER ID, 10);
+$recommendations = $recommender->recommend(USER ID, 5);
+
+print_r($recommendations);
 

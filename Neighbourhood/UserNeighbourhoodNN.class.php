@@ -32,8 +32,11 @@ class UserNeighbourhoodNN implements UserNeighbourhood {
 
     foreach ($users as $user) {
       if ($user == $userId) continue;
+      
+      $similarity = $this->_similarity->userSimilarity($userId, $user);
     
-      $scores[$user] = $this->_similarity->userSimilarity($userId, $user); 
+      if ($similarity > 0)
+        $scores[$user] = $this->_similarity->userSimilarity($userId, $user); 
     }
     
     arsort($scores, SORT_NUMERIC); // reverse sort

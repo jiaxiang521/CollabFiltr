@@ -34,6 +34,7 @@ class test {
     
     PHPUnit_Util_Filter::addFileToFilter('test.php');
     PHPUnit_Util_Filter::addFileToFilter('settings.php');
+    PHPUnit_Util_Filter::addDirectorytoFilter('Mock');
     
     return $suite;
   }
