@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../interfaces/Rating.interface.php');
+require_once(dirname(__FILE__) . '/../Interfaces/Rating.interface.php');
 
 class GenericRating implements Rating {
   private $_userId;

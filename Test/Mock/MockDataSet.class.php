@@ -1,7 +1,9 @@
 <?php
 
+require_once(dirname(__FILE__) . '/../../Interfaces/DataSet.interface.php');
+
 class MockDataSet implements DataSet {
-  private $_users;
+  protected $_users;
 
   public function __construct() {
     $this->_users = array('Lisa Rose' => array('Lady in the Water'  => 2.5,
@@ -66,10 +68,13 @@ class MockDataSet implements DataSet {
 
     return new Item($itemId, $this->_items[$itemId]);
   }
+  
+  public function getRatingMin() { return 1.0; }
+  public function getRatingMax() { return 5.0; }
 
   public function getItemIds()  { }
-  public function getNumUsers() { }
-  public function getNumItems() { }
+  public function getNumUsers() { return count($this->_users); }
+  public function getNumItems() { return 6; }
   public function isItem($a)    { }
   public function getItemRatingsArray($a) { }
 }

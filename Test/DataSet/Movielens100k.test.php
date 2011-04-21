@@ -1,11 +1,11 @@
 <?php
 
 require_once(dirname(__FILE__) . '/../settings.php');
-require_once(dirname(__FILE__) . '/../../DataSet/FileDataSet.class.php');
+require_once(dirname(__FILE__) . '/../../DataSet/MovieLensDataSet.class.php');
 
-define('DATA_FILE', dirname(__FILE__) . '/../../../100k.data');
+define('DATA_DIR', dirname(__FILE__) . '/../../Data/MovieLens/small');
 
-  // only load file data once (PHPUnit)
+// only load file data once (PHPUnit)
 class MovieLens100kTest extends CollabFiltrTestSuite {
   public static function suite() {
     return new MovieLens100kTest('MovieLens100kTestTest');
@@ -14,7 +14,7 @@ class MovieLens100kTest extends CollabFiltrTestSuite {
   public function setUp() {
     // shared fixture as loading so much data is a big operation,
     // and doing it every test slows the tests down to a crawl
-    $this->sharedFixture = new FileDataSet(DATA_FILE);
+    $this->sharedFixture = new MovieLensDataSet(DATA_DIR);
   }
 
   public function tearDown() {
@@ -28,7 +28,7 @@ class MovieLens100kTestTest extends CollabFiltrTest {
     global $TEST_BED;
 
     if ($TEST_BED == 'SimpleTest')
-      $this->sharedFixture = new FileDataSet(DATA_FILE);
+      $this->sharedFixture = new MovieLensDataSet(DATA_DIR);
   }
  
   public function testUserCount() {
@@ -44,7 +44,7 @@ class MovieLens100kTestTest extends CollabFiltrTest {
   }
   
   public function testIsUserFalse() {
-    $this->assertFalse($this->sharedFixture->isUser(1337));
+    $this->assertFalse($this->sharedFixture->isUser(9999));
   }
   
   public function testIsItemTrue() {
@@ -77,5 +77,31 @@ class MovieLens100kTestTest extends CollabFiltrTest {
         $this->fail();
 
     $this->assertEquals($i, 1682);
+  }
+  
+  public function testUserObjError() {
+    try { 
+      $this->sharedFixture->getUser(9999);
+      $this->fail('User should have been invalid');
+    } catch (Exception $e) {
+      return $this->pass();
+    }
+  }
+  
+  public function testUserObjId() {
+    $user = $this->sharedFixture->getUser(666);
+    
+    $this->assertEquals($user->getId(), 666);
+  }
+  
+  public function testUserObjRatings() {
+    $user    = $this->sharedFixture->getUser(666);
+    $rated   = $this->sharedFixture->getUserRatingsArray(666);
+    $ratings = array();
+    
+    foreach ($rated as $itemId => $rating)
+      $ratings[] = new GenericRating(666, $itemId, $rating); 
+    
+    $this->assertEquals($user->getRatings(), $ratings);
   }
 }

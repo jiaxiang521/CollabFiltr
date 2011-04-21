@@ -6,7 +6,7 @@ require_once(dirname(__FILE__) . '/../../Recommenders/UserBasedRecommender.class
 require_once(dirname(__FILE__) . '/../Mock/MockDataSet.class.php');
 require_once(dirname(__FILE__) . '/../Mock/MockSimilarity.class.php');
 
-require_once(dirname(__FILE__) . '/../../Neighbourhood/UserNeighbourhoodNN.class.php');
+require_once(dirname(__FILE__) . '/../../Neighbourhood/UserNeighbourhoodKNN.class.php');
 
 class UserBasedRecommenderTest extends CollabFiltrTest {
   private $_dataSet;
@@ -18,8 +18,8 @@ class UserBasedRecommenderTest extends CollabFiltrTest {
   public function testPearsonNN() {
     $similarity = new MockSimilarity('pearson');
 
-    $userNN = new UserNeighbourhoodNN($this->_dataSet, 30, $similarity);
-    $recommender = new UserBasedRecommender($this->_dataSet, $userNN);
+    $userKNN     = new UserNeighbourhoodKNN($this->_dataSet, 30, $similarity);
+    $recommender = new UserBasedRecommender($this->_dataSet, $userKNN);
     
     $recommendations = $recommender->recommend('Toby', 3);
     
@@ -37,8 +37,8 @@ class UserBasedRecommenderTest extends CollabFiltrTest {
   public function testEuclideanNN() {
     $similarity = new MockSimilarity('euclidean');
 
-    $userNN = new UserNeighbourhoodNN($this->_dataSet, 30, $similarity);
-    $recommender = new UserBasedRecommender($this->_dataSet, $userNN);
+    $userKNN     = new UserNeighbourhoodKNN($this->_dataSet, 30, $similarity);
+    $recommender = new UserBasedRecommender($this->_dataSet, $userKNN);
     
     $recommendations = $recommender->recommend('Toby', 3);
     

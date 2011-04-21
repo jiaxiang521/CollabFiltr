@@ -18,13 +18,15 @@ class UserSimilarityTest extends CollabFiltrTest {
     $pearson    = new PearsonCorrelationSimilarity($this->_dataSet);
     $similarity = $pearson->userSimilarity('Lisa Rose', 'Gene Seymour');
     
-    $this->assertEquals(round($similarity, 6), 0.396059);
+    // 6 decimal places accuracy
+    $this->assertEquals(substr($similarity, 0, 8), 0.396059);
   }
   
   public function testEuclidean() {
     $euclidean  = new EuclideanDistanceSimilarity($this->_dataSet);
     $similarity = $euclidean->userSimilarity('Lisa Rose', 'Gene Seymour');
 
-    $this->assertEquals(round($similarity, 6), 0.148148);
+		// 6 decimal places accuracy
+    $this->assertEquals(substr($similarity, 0, 8), 0.148148);
   }
 }

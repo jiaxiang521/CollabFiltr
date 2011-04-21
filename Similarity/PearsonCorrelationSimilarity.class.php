@@ -1,34 +1,24 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../Interfaces/UserSimilarity.interface.php');
+require_once(dirname(__FILE__) . '/AbstractSimilarity.class.php');
 
-class PearsonCorrelationSimilarity implements UserSimilarity {
-  private $_dataSet;
-  
-  public function __construct(Dataset $dataset) {
-    $this->_dataSet = $dataset;
-  }
-  
-  public function userSimilarity($userId1, $userId2) {
-    $userRatings1 = $this->_dataSet->getUserRatingsArray($userId1);
-    $userRatings2 = $this->_dataSet->getUserRatingsArray($userId2);
-    
-    $mutuallyRated = array_intersect(array_keys($userRatings1),
-                                     array_keys($userRatings2));
+class PearsonCorrelationSimilarity extends AbstractSimilarity {
+  protected function _similarity($ratings1, $ratings2) {
+    $mutuallyRated = array_intersect(array_keys($ratings1),
+                                     array_keys($ratings2));
 
     $length = count($mutuallyRated);
     if (!$length) return 0;
-    
-    $sum1 = $sum2 = $sum1Sq = $sum2Sq = $sumPrd = 0;
-    
-    foreach ($mutuallyRated as $item) {
-      $sum1   += $userRatings1[$item];
-      $sum2   += $userRatings2[$item];
   
-      $sum1Sq += pow($userRatings1[$item], 2);
-      $sum2Sq += pow($userRatings2[$item], 2);
+    $sum1 = $sum2 = $sum1Sq = $sum2Sq = $sumPrd = 0;
+    foreach ($mutuallyRated as $index) {
+      $sum1   += $ratings1[$index];
+      $sum2   += $ratings2[$index];
+  
+      $sum1Sq += pow($ratings1[$index], 2);
+      $sum2Sq += pow($ratings2[$index], 2);
       
-      $sumPrd += $userRatings1[$item] * $userRatings2[$item];
+      $sumPrd += $ratings1[$index] * $ratings2[$index];
     }
     
     $num = $sumPrd - ($sum1 * $sum2 / $length);

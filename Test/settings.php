@@ -3,6 +3,13 @@
 // Path to simpletest
 define('TEST_PATH', dirname(__FILE__) . '/../../simpletest/');
 
+// Database options
+define('DB_TEST', 1);
+define('DB_SOCK', '/Applications/MAMP/tmp/mysql/mysql.sock');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_NAME', 'collabfiltr');
+
 // only SimpleTest an be run directly via PHP CLI or the web
 if (isset($argc) || (!isset($_SERVER['argc'])))
   $TEST_BED = 'SimpleTest';

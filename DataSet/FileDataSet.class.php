@@ -1,16 +1,16 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../interfaces/DataSet.interface.php');
+require_once(dirname(__FILE__) . '/../Interfaces/DataSet.interface.php');
 require_once(dirname(__FILE__) . '/GenericDataSet.class.php');
 
 class FileDataSet implements DataSet {
-  private $_dataSet;
+  protected $_dataSet;
 
-  public function __construct($file) {
+  public function __construct($file, $ratingRange) {
     $fh = fopen($file, 'rb');
     if (!$fh) throw new RuntimeException('Could not open file');
 
-    $builder = new GenericDataSetBuilder();
+    $builder = new GenericDataSetBuilder($ratingRange);
 
     // add each line at a time to builder
     // (using a builder as GenericDataSet is immutable)
@@ -21,7 +21,6 @@ class FileDataSet implements DataSet {
     }
 
     fclose($fh);
-
     $this->_dataSet = $builder->build();
   }
 
@@ -39,4 +38,7 @@ class FileDataSet implements DataSet {
 
   public function getUserRatingsArray($user) { return $this->_dataSet->getUserRatingsArray($user); }
   public function getItemRatingsArray($item) { return $this->_dataSet->getItemRatingsArray($item); }
+  
+  public function getRatingMin() { return $this->_dataSet->getRatingMin(); }
+  public function getRatingMax() { return $this->_dataSet->getRatingMax(); }
 }
